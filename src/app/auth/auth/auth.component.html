@@ -1,16 +1,28 @@
-<div class="row">
-  <div class="col-xs-12 col-lg-6 offset-lg-3">
-<div class="alert alert-danger"
-*ngIf="error">
-  <p>{{error}}</p>
-</div>
-    <div *ngIf="isLoading">
+<ng-template #alert 
+></ng-template>
+<div class="row ">
+  <div class="col-xs-12 col-lg-6 offset-lg-3 mt-5 border rounded p-4 bg-light">
+    <!-- <div class="alert alert-danger row " *ngIf="error">
+     <div class="col-xs-12 d-flex justify-content-between align-items-center ">
+      <p>{{ error }}</p>
+      <button class="btn btn-danger " 
+      (click)="onRemoveError()"
+      > Ok</button>
+     </div>
+    </div> -->
+    <!-- <app-alert [message]="error" 
+    *ngIf="error"
+    (close)="onHandleError()"
+    ></app-alert> -->
+    <div *ngIf="isLoading" style="text-align: center;">
       <app-loading-spinner> </app-loading-spinner>
     </div>
-    <form #authForm="ngForm"
-     (ngSubmit)="onSubmit(authForm)"
-     *ngIf="!isLoading">
-      <div class="form-group">
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" *ngIf="!isLoading">
+      <div>
+        <h2> {{ isLoginMode ? "Login" : "Sign Up" }}</h2>
+      </div>
+      <hr>
+      <div class="form-group mt-2">
         <label for="email">E-Mail</label>
         <input
           type="email"
@@ -22,7 +34,7 @@
           required
         />
       </div>
-      <div class="form-group">
+      <div class="form-group mt-2 ">
         <label for="password">Password</label>
         <input
           type="password"
@@ -35,10 +47,11 @@
         />
       </div>
       <div class="mt-2">
-        <button class="btn btn-primary"
-         type="submit"
-         [disabled]="!authForm.valid"
-         >
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!authForm.valid"
+        >
           {{ isLoginMode ? "Login" : "Sign Up" }}
         </button>
         |

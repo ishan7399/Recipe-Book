@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Recipe } from "../recipies/recipe.model";
 import { RecipeService } from "../recipies/recipe.service";
-import { map } from "rxjs";
+import { exhaustMap, map, take, tap } from "rxjs";
+import { AuthService } from "../auth/auth/auth.service";
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
     constructor(private http: HttpClient,
-        private recipeService: RecipeService) { }
+        private recipeService: RecipeService,
+        private authService: AuthService) { }
 
 
 
@@ -19,18 +21,16 @@ export class DataStorageService {
             })
     }
 
-    fetchRecipe(){
-        this.http.get<Recipe[]>('https://ng-recipe-book-6e229-default-rtdb.firebaseio.com/recipies.json').
-        pipe(map(recipies=>{
-            return recipies.map(recipie=>{
-                return {...recipie,ingredents: recipie.ingredents?recipie.ingredents : []}
+    fetchRecipe() {
+
+            return this.http.get<Recipe[]>('https://ng-recipe-book-6e229-default-rtdb.firebaseio.com/recipies.json').pipe( map(recipies => {
+            return recipies.map(recipie => {
+                return { ...recipie, ingredents: recipie.ingredents ? recipie.ingredents : [] }
             })
-        }))
-        .subscribe(
-            recipies=>{
-       
-            this.recipeService.setRecipies(recipies)
-            }
-        )
+        }),
+            tap(recipies => {
+                this, this.recipeService.setRecipies(recipies)
+            }))
+
     }
 }

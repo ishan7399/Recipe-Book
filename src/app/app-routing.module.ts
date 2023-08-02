@@ -6,12 +6,15 @@ import { RecipeStartComponent } from './recipies/recipe-start/recipe-start.compo
 import { RecipeDetailsComponent } from './recipies/recipe-details/recipe-details.component';
 import { RecipeEditComponent } from './recipies/recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/auth/auth.component';
-// import { RecipiesResolverService } from './recipies/recipies-resolver.service';
+import { AuthGuard } from './auth/auth/auth.guard';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/recipies', pathMatch: 'full' },
   {
-    path: 'recipies', component: RecipiesComponent, children: [
+    path: 'recipies', component: RecipiesComponent, 
+    canActivate:[AuthGuard]
+,    children: [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent },
       {
